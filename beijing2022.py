@@ -29,10 +29,10 @@ async def beijing2022(session):
     if res['code'] == 0:
         sentences = res['data']['list']
 #         print('国家/缩写           金牌/排名 银牌/排名 铜牌/排名 总/排名')
-        msg='\t冬奥会奖牌榜\n排名:国家/缩写\t金牌/银牌/铜牌\n'
+        msg='\t冬奥会奖牌榜\n排名:国家/缩写\t金牌/银牌/铜牌'
         for i in sentences[:15]:
 #             print('{:\u3000<12}{:<10}{:<10}{:<10}{:<10}'.format(f"{i['nocName']}/{i['nocShortName']}", f"{i['gold']}/{i['nocGoldRank']}", f"{i['silver']}/{i['nocSilverRank']}", f"{i['bronze']}/{i['nocBronzeRank']}", f"{i['total']}/{i['nocRank']}"))
-            msg=msg+f"第{i['nocGoldRank']}名:{i['nocName']}/{i['nocShortName']}\t"+f"{i['gold']}/"+f"{i['silver']}/"+f"{i['bronze']}\n"
+            msg=msg+f"\n第{i['nocGoldRank']}名:{i['nocName']}/{i['nocShortName']}\t"+f"{i['gold']}/"+f"{i['silver']}/"+f"{i['bronze']}"
 #         print(msg)
         await session.send(msg, at_sender=True)
     else:
