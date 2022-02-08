@@ -3,8 +3,8 @@ from hoshino import Service, priv
 from nonebot import on_command
 
 sv_help = '''
-冬奥会奖牌榜
-中国奖牌榜
+冬奥会奖牌榜,冬奥奖牌榜,冬榜
+中国奖牌榜,中榜
 '''.strip()
 
 sv = Service(
