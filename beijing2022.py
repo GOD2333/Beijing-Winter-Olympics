@@ -1,11 +1,10 @@
-from re import A
-from tabnanny import verbose
 import requests
 from hoshino import Service, priv
 from nonebot import on_command
 
 sv_help = '''
 冬奥会奖牌榜
+中国奖牌榜
 '''.strip()
 
 sv = Service(
@@ -22,18 +21,27 @@ sv = Service(
 async def bangzhu(bot, ev):
     await bot.send(ev, sv_help, at_sender=True)
     
-@on_command('冬奥会奖牌榜', aliases=('冬榜'), only_to_me=False)
+@on_command('冬奥会奖牌榜', aliases=('冬奥奖牌榜','冬榜'), only_to_me=False)
 async def beijing2022(session):
     resp = requests.get('https://app.sports.qq.com/m/oly/medalsRank?from=h5',timeout=100)
     res = resp.json()
     if res['code'] == 0:
         sentences = res['data']['list']
-#         print('国家/缩写           金牌/排名 银牌/排名 铜牌/排名 总/排名')
-        msg='\t冬奥会奖牌榜\n排名:国家/缩写\t金牌/银牌/铜牌'
+        msg='\t\t冬奥会奖牌榜\n排名:国家/缩写\t金牌/银牌/铜牌'
         for i in sentences[:15]:
-#             print('{:\u3000<12}{:<10}{:<10}{:<10}{:<10}'.format(f"{i['nocName']}/{i['nocShortName']}", f"{i['gold']}/{i['nocGoldRank']}", f"{i['silver']}/{i['nocSilverRank']}", f"{i['bronze']}/{i['nocBronzeRank']}", f"{i['total']}/{i['nocRank']}"))
-            msg=msg+f"\n第{i['nocGoldRank']}名:{i['nocName']}/{i['nocShortName']}\t"+f"{i['gold']}/"+f"{i['silver']}/"+f"{i['bronze']}"
-#         print(msg)
-        await session.send(msg, at_sender=True)
+            msg=msg+f"\n第{i['nocGoldRank']}名:{i['nocName']}/{i['nocShortName']}\t{i['gold']}/{i['silver']}/{i['bronze']}"
+        await session.send(msg, at_sender=False)
+    else:
+        await session.send('发生错误', at_sender=True)
+
+
+@on_command('中国奖牌榜', aliases=('中榜'), only_to_me=False)
+async def beijing2022CN(session):
+    resp = requests.get('https://app.sports.qq.com/m/oly/medalChina?from=h5',timeout=100)
+    res = resp.json()
+    if res['code'] == 0:
+        i = res['data']['medal']
+        msg=f"🇨🇳中国 奖牌榜 NO.{i['nocGoldRank']}\n🥇金:{i['gold']}\t🥈银:{i['silver']}\t🥉铜:{i['bronze']}\t总计:{i['total']}"
+        await session.send(msg, at_sender=False)
     else:
         await session.send('发生错误', at_sender=True)
